@@ -32,6 +32,7 @@
             </b-col>
             <b-col>
               <canvas></canvas>
+              <button @click="emitSocket" class="btn btn-default">Send message</button>
             </b-col>
             <b-col>
             </b-col>
@@ -89,6 +90,8 @@
 </template>
 
 <script>
+import io from 'socket.io-client';
+
 export default {
   name: 'app',
   data () {
@@ -125,7 +128,8 @@ export default {
           message: "Hey hoy!!!"
         }
       ],
-      currentUserId: 1
+      currentUserId: 1,
+      socket: null
     }
   },
   methods: {
@@ -140,7 +144,23 @@ export default {
       $('.scroll-area').scrollTop(100);
       console.log($('.scroll-area').height());
       console.log($('.scroll-area').scrollTop());
+    },
+    emitSocket: function() {
+      this.socket.emit('azaza', { id: 123 });
+      console.log(123);
     }
+  },
+  created: function () {
+    // `this` указывает на экземпляр vm
+    console.log('Эзкемпляр создан! Ура, Торварищи!!!');
+    var socket = io('http://localhost:3000');
+    this.socket = socket;
+
+    console.log('init');
+
+    socket.on('connect', function() {
+       console.log('connect ' + socket.id);
+    });
   }
 }
 </script>
