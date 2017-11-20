@@ -12,10 +12,11 @@
     "bootstrap": "^4.0.0-beta.2",
     "bootstrap-vue": "^1.0.2",
     "jquery": "^3.2.1",
+    "pixi.js": "^4.6.1",
     "popper.js": "^1.12.7",
-    "vue": "^2.5.3",
     "socket.io-client": "^2.0.2",
-    "socket.io-json-parser": "^2.1.0"
+    "socket.io-json-parser": "^2.1.0",
+    "vue": "^2.5.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

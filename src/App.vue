@@ -31,7 +31,7 @@
             <b-col>
             </b-col>
             <b-col>
-              <canvas></canvas>
+              <div id="canvas-container"></div>
               <button @click="emitSocket" class="btn btn-default">Send message</button>
             </b-col>
             <b-col>
@@ -91,6 +91,8 @@
 
 <script>
 import io from 'socket.io-client';
+import 'pixi.js';
+import $ from 'jquery';
 
 export default {
   name: 'app',
@@ -151,15 +153,46 @@ export default {
     }
   },
   created: function () {
-    // `this` указывает на экземпляр vm
-    console.log('Эзкемпляр создан! Ура, Торварищи!!!');
-    var socket = io('http://localhost:3000');
+    var socket = io('http://localhost:3005');
     this.socket = socket;
-
-    console.log('init');
-
     socket.on('connect', function() {
        console.log('connect ' + socket.id);
+    });
+  },
+  mounted: function() {
+    var app = new PIXI.Application();
+
+    // The application will create a canvas element for you that you
+    // can then insert into the DOM.
+
+    // document.body.appendChild(app.view);
+    // $('#').append(app.view);
+    document.getElementById('canvas-container').appendChild(app.view);
+
+    // load the texture we need
+    PIXI.loader.add('sf1', 'http://localhost:8080/public/sf1.png').load(function(loader, resources) {
+
+      // This creates a texture from a 'bunny.png' image.
+      var sf1 = new PIXI.Sprite(resources.sf1.texture);
+
+      // Setup the position of the bunny
+      sf1.x = app.renderer.width / 2;
+      sf1.y = app.renderer.height / 2;
+
+      // Rotate around the center
+      sf1.anchor.x = 0.5;
+      sf1.anchor.y = 0.5;
+      sf1.height = 171;
+      sf1.width = 146;
+
+      // Add the bunny to the scene we are building.
+      app.stage.addChild(sf1);
+
+      // Listen for frame updates
+      app.ticker.add(function() {
+          // each frame we spin the bunny around a bit
+          sf1.rotation += 0.01;
+      });
     });
   }
 }
