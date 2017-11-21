@@ -153,6 +153,7 @@ export default {
     }
   },
   created: function () {
+    return;
     var socket = io('http://localhost:3005');
     this.socket = socket;
     socket.on('connect', function() {
@@ -160,40 +161,145 @@ export default {
     });
   },
   mounted: function() {
-    var app = new PIXI.Application();
+    function keyboard(keyCode) {
+      var key = {};
+      key.code = keyCode;
+      key.isDown = false;
+      key.isUp = true;
+      key.press = undefined;
+      key.release = undefined;
+      key.downHandler = function(event) {
+        if (event.keyCode === key.code) {
+          if (key.isUp && key.press) key.press();
+          key.isDown = true;
+          key.isUp = false;
+        }
+        // event.preventDefault();
+      };
 
-    // The application will create a canvas element for you that you
-    // can then insert into the DOM.
+      //The `upHandler`
+      key.upHandler = function(event) {
+        if (event.keyCode === key.code) {
+          if (key.isDown && key.release) key.release();
+          key.isDown = false;
+          key.isUp = true;
+        }
+        // event.preventDefault();
+      };
 
-    // document.body.appendChild(app.view);
-    // $('#').append(app.view);
-    document.getElementById('canvas-container').appendChild(app.view);
+      //Attach event listeners
+      window.addEventListener(
+        "keydown", key.downHandler.bind(key), false
+      );
+      window.addEventListener(
+        "keyup", key.upHandler.bind(key), false
+      );
+      return key;
+    }
 
-    // load the texture we need
-    PIXI.loader.add('sf1', 'http://localhost:8080/public/sf1.png').load(function(loader, resources) {
+    var left = keyboard(65),
+        up = keyboard(87),
+        right = keyboard(68),
+        down = keyboard(83);
+    
+    var sprite, state, turret, hull;
 
-      // This creates a texture from a 'bunny.png' image.
-      var sf1 = new PIXI.Sprite(resources.sf1.texture);
+    var Container = PIXI.Container,
+        autoDetectRenderer = PIXI.autoDetectRenderer,
+        loader = PIXI.loader,
+        resources = PIXI.loader.resources,
+        Sprite = PIXI.Sprite;
 
-      // Setup the position of the bunny
-      sf1.x = app.renderer.width / 2;
-      sf1.y = app.renderer.height / 2;
 
-      // Rotate around the center
-      sf1.anchor.x = 0.5;
-      sf1.anchor.y = 0.5;
-      sf1.height = 171;
-      sf1.width = 146;
+    // var app = new PIXI.Application();
+    var renderer = autoDetectRenderer(
+      256, 256,
+      {antialias: true, transparent: true, resolution: 1}
+    );
+    renderer.view.style.border = "1px dashed black";
+    renderer.backgroundColor = 0x061639;
+    renderer.autoResize = true;
+    renderer.resize(256, 256)
+    document.getElementById('canvas-container').appendChild(renderer.view);
+    var stage = new Container();
+    loader
+      .add("http://localhost:8080/public/ships.json")
+      .load(setup);
 
-      // Add the bunny to the scene we are building.
-      app.stage.addChild(sf1);
+    function setup() {
+      var id = resources["http://localhost:8080/public/ships.json"].textures;
+      hull = new Sprite(id["orangeship.png"]);
+      hull.anchor.set(0.5, 0.5);
+      hull.position.set(0, 0);
+      hull.scale.x = 0.6;
+      hull.scale.y = 0.6;
 
-      // Listen for frame updates
-      app.ticker.add(function() {
-          // each frame we spin the bunny around a bit
-          sf1.rotation += 0.01;
-      });
-    });
+      turret = new Sprite(id["turret_small.png"]);
+      turret.anchor.set(0.5, 0.6);
+      turret.position.set(0, -45);
+      turret.scale.x = 0.6;
+      turret.scale.y = 0.6;
+      turret.vRot = 0;
+      
+
+      sprite = new Container();
+      sprite.position.set(100, 100);
+      sprite.vx = 0;
+      sprite.vy = 0;
+      sprite.addChild(hull);
+      sprite.addChild(turret);
+      stage.addChild(sprite);
+
+      up.press = function() {
+        sprite.vy = -0.5;
+      };
+
+      up.release = function() {
+        sprite.vy = 0;
+      }
+
+      down.press = function() {
+        sprite.vy = 0.5;
+      };
+
+      down.release = function() {
+        sprite.vy = 0;
+      }
+
+      left.press = function() {
+        sprite.vx -= 0.5;
+        turret.vRot = -1;
+      };
+
+      left.release = function() {
+        sprite.vx += 0.5;
+        turret.vRot = 0;
+      }
+      right.press = function() {
+        sprite.vx += 0.5;
+        turret.vRot = 1;
+      };
+
+      right.release = function() {
+        sprite.vx -= 0.5;
+        turret.vRot = 0;
+      }
+      state = play;
+      renderer.render(stage);
+      gameLoop();
+    };
+    function gameLoop() {
+      requestAnimationFrame(gameLoop);
+      state();
+      sprite.x += sprite.vx;
+      renderer.render(stage);
+    }
+
+    function play() {
+      turret.rotation += turret.vRot * 0.05;
+      sprite.x += sprite.vx;
+      sprite.y += sprite.vy
+    }
   }
 }
 </script>

@@ -1,0 +1,93 @@
+{"frames": {
+
+"1.png":
+{
+	"frame": {"x":123,"y":0,"w":55,"h":95},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":55,"h":95},
+	"sourceSize": {"w":55,"h":95},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"greenship1.png":
+{
+	"frame": {"x":0,"y":247,"w":162,"h":286},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":162,"h":286},
+	"sourceSize": {"w":162,"h":286},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"greenship2.png":
+{
+	"frame": {"x":292,"y":0,"w":140,"h":247},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":140,"h":247},
+	"sourceSize": {"w":140,"h":247},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"greenship3.png":
+{
+	"frame": {"x":178,"y":0,"w":114,"h":201},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":114,"h":201},
+	"sourceSize": {"w":114,"h":201},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"orangeship.png":
+{
+	"frame": {"x":326,"y":247,"w":172,"h":302},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":172,"h":302},
+	"sourceSize": {"w":172,"h":302},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"orangeship3.png":
+{
+	"frame": {"x":162,"y":247,"w":164,"h":251},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":164,"h":251},
+	"sourceSize": {"w":164,"h":251},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"sf1.png":
+{
+	"frame": {"x":77,"y":0,"w":46,"h":71},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":71},
+	"sourceSize": {"w":46,"h":71},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"turret_large.png":
+{
+	"frame": {"x":32,"y":0,"w":45,"h":56},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":56},
+	"sourceSize": {"w":45,"h":56},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"turret_small.png":
+{
+	"frame": {"x":0,"y":0,"w":32,"h":47},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":47},
+	"sourceSize": {"w":32,"h":47},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "ships.png",
+	"format": "RGBA8888",
+	"size": {"w":498,"h":549},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d8e71bcee41ae909f30c38b5ca23abfe:44a07d27931a11c7cdb2d3ade64f8b65:78154fe33c5dfc8c7f67f0a3677ac0ac$"
+}
+}
