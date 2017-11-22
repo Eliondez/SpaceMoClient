@@ -38,7 +38,8 @@ var Scene = function() {
   var left = keyboard(65),
       up = keyboard(87),
       right = keyboard(68),
-      down = keyboard(83);
+      down = keyboard(83),
+      fireBtn = keyboard(32);
   
   var sprite,
       state,
@@ -78,21 +79,17 @@ var Scene = function() {
     bgCont = new Container();
     stars1cont = new Container();
     var stars11 = new Sprite(resources["http://localhost:8080/public/stars1.png"].texture);
-    // stars11.anchor.set(0, 0);
     stars11.position.set(0, 0);
     stars1cont.addChild(stars11);
     var stars12 = new Sprite(resources["http://localhost:8080/public/stars1.png"].texture);
-    // stars12.anchor.set(0, 0);
     stars12.position.set(0, -800);
     stars1cont.addChild(stars12);
 
     stars2cont = new Container();
     var stars21 = new Sprite(resources["http://localhost:8080/public/stars2.png"].texture);
-    // stars11.anchor.set(0, 0);
     stars21.position.set(0, 0);
     stars2cont.addChild(stars21);
     var stars22 = new Sprite(resources["http://localhost:8080/public/stars2.png"].texture);
-    // stars12.anchor.set(0, 0);
     stars22.position.set(0, -800);
     stars2cont.addChild(stars22);
     bgCont.addChild(stars1cont);
@@ -102,11 +99,12 @@ var Scene = function() {
     enemyList = [];
     var enemyNum = 11;
     var enemySpan = 50;
+    var centerPosition = 500;
     var enemyWide = (enemyNum - 1) * enemySpan;
     for (var i = 0; i < enemyNum; i++) {
       var id = resources["http://localhost:8080/public/ships.json"].textures;
       var enemy = new Sprite(id["greenship3.png"]);
-      enemy.position.set(500 + 100 + i * 50, 100);
+      enemy.position.set(centerPosition - enemyWide / 2 + i * 50, 100);
       enemy.rotation = Math.PI;
       enemy.scale.x = 0.2;
       enemy.scale.y = 0.2;
@@ -140,6 +138,9 @@ var Scene = function() {
     sprite.position.set(500, 700);
     sprite.vx = 0;
     sprite.vy = 0;
+    sprite.pewpew = false;
+    sprite.reload = 0;
+    sprite.reloadMax = 30;
     sprite.linearVel = 1.5; 
     sprite.addChild(hull);
     // sprite.addChild(turret);
@@ -179,6 +180,13 @@ var Scene = function() {
       sprite.vx -= sprite.linearVel;
       // turret.vRot = 0;
     }
+    fireBtn.press = function() {
+      sprite.pewpew = true;
+    };
+
+    fireBtn.release = function() {
+      sprite.pewpew = false;
+    }
     state = play;
     renderer.render(stage);
     gameLoop();
@@ -202,6 +210,15 @@ var Scene = function() {
     if (stars2cont.y > 800) {
       stars2cont.y = 0;
     }
+    if (sprite.reload > 0) {
+      sprite.reload -= 1;
+    }
+
+    if (sprite.pewpew && sprite.reload === 0) {
+      console.log("Shoot!");
+      sprite.reload = sprite.reloadMax;
+    }
+
   }
 
   self.init = function () {
