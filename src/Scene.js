@@ -97,6 +97,7 @@ var Scene = function() {
     stage.addChild(bgCont);
     
     enemyList = [];
+    bulletList = [];
     var enemyNum = 11;
     var enemySpan = 50;
     var centerPosition = 500;
@@ -142,6 +143,19 @@ var Scene = function() {
     sprite.reload = 0;
     sprite.reloadMax = 30;
     sprite.linearVel = 1.5; 
+    sprite.shoot = function() {
+      var bullet = new PIXI.Graphics();
+      bullet.beginFill(0xffc107, 1);
+      bullet.drawRect(-2, -4, 4, 8);
+      bullet.endFill();
+      // bullet.anchor.set(0.5, 0.5);
+      bullet.position.set(sprite.x, sprite.y - 30);
+      console.log(sprite.x, sprite.y - 30);
+      bulletList.push(bullet);
+      stage.addChild(bullet);
+      // hull.scale.x = 0.3;
+      // hull.scale.y = 0.3;
+    }
     sprite.addChild(hull);
     // sprite.addChild(turret);
     stage.addChild(sprite);
@@ -216,7 +230,12 @@ var Scene = function() {
 
     if (sprite.pewpew && sprite.reload === 0) {
       console.log("Shoot!");
+      sprite.shoot();
       sprite.reload = sprite.reloadMax;
+    }
+
+    for (var i in bulletList) {
+      bulletList[i].y -= 3;
     }
 
   }
