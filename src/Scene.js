@@ -119,21 +119,10 @@ var Scene = function() {
     hull.scale.x = 0.3;
     hull.scale.y = 0.3;
 
-    // turret = new Sprite(id["turret_small.png"]);
-    // turret.anchor.set(0.5, 0.6);
-    // turret.position.set(0, -45);
-    // turret.scale.x = 0.6;
-    // turret.scale.y = 0.6;
-    // turret.vRot = 0;
+    var checkCollision = function(ent1, ent2) {
+      var colDist = 10;
 
-    // centerLine = new PIXI.Graphics();
-    // centerLine.lineStyle(4, 0xFF00FF, 1);
-    // centerLine.moveTo(0, 0);
-    // centerLine.lineTo(0, -400);
-    // centerLine.x = 512;
-    // centerLine.y = 406;
-    // stage.addChild(centerLine);
-    
+    }
 
     sprite = new Container();
     sprite.position.set(500, 700);
@@ -141,7 +130,7 @@ var Scene = function() {
     sprite.vy = 0;
     sprite.pewpew = false;
     sprite.reload = 0;
-    sprite.reloadMax = 30;
+    sprite.reloadMax = 14;
     sprite.linearVel = 1.5; 
     sprite.shoot = function() {
       var bullet = new PIXI.Graphics();
@@ -150,7 +139,7 @@ var Scene = function() {
       bullet.endFill();
       // bullet.anchor.set(0.5, 0.5);
       bullet.position.set(sprite.x, sprite.y - 30);
-      console.log(sprite.x, sprite.y - 30);
+      bullet.lifetime = 250;
       bulletList.push(bullet);
       stage.addChild(bullet);
       // hull.scale.x = 0.3;
@@ -210,6 +199,14 @@ var Scene = function() {
     state();
     
     renderer.render(stage);
+    for (var i in bulletList) {
+      bulletList[i].y -= 3;
+      bulletList[i].lifetime -= 1;
+      if (bulletList[i].toDestroy) {
+        bulletList[i].destroy();
+        bulletList.splice(i, 1);
+      }
+    }
   }
 
   function play() {
@@ -229,13 +226,16 @@ var Scene = function() {
     }
 
     if (sprite.pewpew && sprite.reload === 0) {
-      console.log("Shoot!");
       sprite.shoot();
       sprite.reload = sprite.reloadMax;
     }
 
     for (var i in bulletList) {
       bulletList[i].y -= 3;
+      bulletList[i].lifetime -= 1;
+      if (bulletList[i].lifetime <= 0) {
+        bulletList[i].toDestroy = true;
+      }
     }
 
   }
