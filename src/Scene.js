@@ -110,6 +110,7 @@ var Scene = function() {
       enemy.scale.x = 0.2;
       enemy.scale.y = 0.2;
       stage.addChild(enemy);
+      enemyList.push(enemy);
     }
 
     
@@ -120,8 +121,15 @@ var Scene = function() {
     hull.scale.y = 0.3;
 
     var checkCollision = function(ent1, ent2) {
-      var colDist = 10;
-
+      console.log(ent1, ent2);
+      var colDist = 50;
+      var dist = Math.hypot(ent1.x - ent2.x, ent1.y - ent2.y);
+      console.log(dist);
+      if (dist < colDist) {
+        console.log("Collision!");
+        return true;
+      }
+      return false;
     }
 
     sprite = new Container();
@@ -229,6 +237,13 @@ var Scene = function() {
       sprite.shoot();
       sprite.reload = sprite.reloadMax;
     }
+
+    for (var i in bulletList) {
+      for (var j in enemyList) {
+        checkCollision(bulletList[i], enemyList[j]);
+      }
+    }
+
 
     for (var i in bulletList) {
       bulletList[i].y -= 3;
