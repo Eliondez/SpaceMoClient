@@ -105,6 +105,8 @@ var Scene = function() {
     for (var i = 0; i < enemyNum; i++) {
       var id = resources["http://localhost:8080/public/ships.json"].textures;
       var enemy = new Sprite(id["greenship3.png"]);
+
+      sprite = new Container();
       enemy.position.set(centerPosition - enemyWide / 2 + i * 50, 100);
       enemy.rotation = Math.PI;
       enemy.scale.x = 0.2;
@@ -207,6 +209,7 @@ var Scene = function() {
     renderer.render(stage);
 
     for (var j in enemyList) {
+      enemyList[j].y += 0.5;
       if (enemyList[j].toDestroy) {
         enemyList[j].destroy();
         enemyList.splice(j, 1);
