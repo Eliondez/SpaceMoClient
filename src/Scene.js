@@ -120,11 +120,9 @@ var Scene = function() {
     hull.scale.x = 0.3;
     hull.scale.y = 0.3;
 
-    var checkCollision = function(ent1, ent2) {
-      console.log(ent1, ent2);
-      var colDist = 50;
+    stage.checkCollision = function(ent1, ent2) {
+      var colDist = 20;
       var dist = Math.hypot(ent1.x - ent2.x, ent1.y - ent2.y);
-      console.log(dist);
       if (dist < colDist) {
         console.log("Collision!");
         return true;
@@ -207,6 +205,15 @@ var Scene = function() {
     state();
     
     renderer.render(stage);
+
+    for (var j in enemyList) {
+      if (enemyList[j].toDestroy) {
+        enemyList[j].destroy();
+        enemyList.splice(j, 1);
+      }
+    }
+
+
     for (var i in bulletList) {
       bulletList[i].y -= 3;
       bulletList[i].lifetime -= 1;
@@ -240,7 +247,10 @@ var Scene = function() {
 
     for (var i in bulletList) {
       for (var j in enemyList) {
-        checkCollision(bulletList[i], enemyList[j]);
+        if (stage.checkCollision(bulletList[i], enemyList[j])) {
+          bulletList[i].toDestroy = true;
+          enemyList[j].toDestroy = true;
+        }
       }
     }
 
