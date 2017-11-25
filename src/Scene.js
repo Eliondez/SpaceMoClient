@@ -59,13 +59,13 @@ var Scene = function() {
       Sprite = PIXI.Sprite;
 
   var renderer = autoDetectRenderer(
-    1000, 800,
+    1000, 600,
     {antialias: true, transparent: false, resolution: 1}
   );
   renderer.view.style.border = "1px dashed black";
   renderer.backgroundColor = 0x000000;
   renderer.autoResize = true;
-  renderer.resize(1000, 768)
+  renderer.resize(1000, 600)
   document.getElementById('canvas-container').appendChild(renderer.view);
   var stage = new Container();
   loader
@@ -133,7 +133,7 @@ var Scene = function() {
     }
 
     sprite = new Container();
-    sprite.position.set(500, 700);
+    sprite.position.set(500, 550);
     sprite.vx = 0;
     sprite.vy = 0;
     sprite.pewpew = false;

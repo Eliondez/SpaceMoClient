@@ -29,6 +29,15 @@
           <br>
           <b-row>
             <b-col>
+              <div class="list-group">
+                <button type="button" class="list-group-item list-group-item-action" @click="reloadScene()">
+                  Reload
+                </button>
+                <!-- <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+                <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
+                <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
+                <button type="button" class="list-group-item list-group-item-action" disabled>Vestibulum at eros</button> -->
+              </div>
             </b-col>
             <b-col>
               <div id="canvas-container"></div>
@@ -94,6 +103,8 @@ import 'pixi.js';
 import $ from 'jquery';
 import Scene from './Scene.js';
 
+var scene1;
+
 export default {
   name: 'app',
   data () {
@@ -150,6 +161,9 @@ export default {
     emitSocket: function() {
       this.socket.emit('azaza', { id: 123 });
       console.log(123);
+    },
+    reloadScene: function() {
+      scene1.init();
     }
   },
   created: function () {
@@ -161,7 +175,7 @@ export default {
     });
   },
   mounted: function() {
-    var scene1 = Scene();
+    scene1 = Scene();
   }
 }
 </script>
