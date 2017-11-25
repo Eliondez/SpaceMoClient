@@ -256,8 +256,6 @@ var Scene = function() {
         }
       }
     }
-
-
     for (var i in bulletList) {
       bulletList[i].y -= 3;
       bulletList[i].lifetime -= 1;
@@ -268,8 +266,25 @@ var Scene = function() {
 
   }
 
+  var deleteAll = function() {
+    bulletList = [];
+    enemyList = [];
+    for (var i = stage.children.length - 1; i >= 0; i-- ) {
+      stage.removeChild(stage.children[i]);
+    }
+  }
+
   self.init = function () {
     console.log("Olala!!");
+  }
+
+  self.reload = function() {
+    // state = null;
+    deleteAll();
+    // createBg();
+    // createUser();
+    // createEnemies();
+    // state = play;
   }
   return self;
 }

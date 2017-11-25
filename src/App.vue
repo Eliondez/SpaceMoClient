@@ -163,7 +163,7 @@ export default {
       console.log(123);
     },
     reloadScene: function() {
-      scene1.init();
+      scene1.reload();
     }
   },
   created: function () {
