@@ -68,12 +68,14 @@ var Scene = function() {
   renderer.resize(1000, 600)
   document.getElementById('canvas-container').appendChild(renderer.view);
   var stage = new Container();
+  loader.reset();
   loader
     .add("http://localhost:8080/public/ships.json")
     .add("http://localhost:8080/public/stars1.png")
     .add("http://localhost:8080/public/stars2.png")
     .load(setup);
 
+  
   function setup() {
     var id = resources["http://localhost:8080/public/ships.json"].textures;
     bgCont = new Container();
@@ -98,7 +100,7 @@ var Scene = function() {
     
     enemyList = [];
     bulletList = [];
-    var enemyNum = 11;
+    var enemyNum = 15;
     var enemySpan = 50;
     var centerPosition = 500;
     var enemyWide = (enemyNum - 1) * enemySpan;
