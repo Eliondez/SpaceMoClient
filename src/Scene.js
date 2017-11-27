@@ -253,7 +253,7 @@ var Scene = function() {
 
   var createEnemies = function() {
     enemyList = {};
-    var enemyNum = 15;
+    var enemyNum = 17;
     var enemySpan = 50;
     var centerPosition = 500;
     var enemyWide = (enemyNum - 1) * enemySpan;
