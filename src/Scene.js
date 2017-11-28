@@ -64,19 +64,21 @@ var Scene = function() {
   renderer.resize(1000, 600)
   document.getElementById('canvas-container').appendChild(renderer.view);
   var stage = new Container();
-  loader.reset();
-  loader
-    .add("http://localhost:8080/public/ships.json")
-    .add("http://localhost:8080/public/stars1.png")
-    .add("http://localhost:8080/public/stars2.png")
-    .load(setup);
+  // // loader.reset();
+  // loader
+  //   .add("http://localhost:8080/public/ships.json")
+  //   .add("http://localhost:8080/public/stars1.png")
+  //   .add("http://localhost:8080/public/stars2.png")
+  //   .load(setup);
+
+  
 
   
   function setup() {
     createBg();
     var player_ship = createUser();
     bindKeys(player_ship);
-    createEnemies();
+    // createEnemies();
     stage.checkCollision = function(ent1, ent2) {
       var colDist = 20;
       var dist = Math.hypot(ent1.x - ent2.x, ent1.y - ent2.y);
@@ -99,12 +101,12 @@ var Scene = function() {
     for (var i = stage.children.length - 1; i >= 0; i-- ) {
      stage.children[i].update();
     }
-        for (var i in bulletList) {
+    for (var i in bulletList) {
       for (var j in enemyList) {
-        // if (stage.checkCollision(bulletList[i], enemyList[j])) {
-        //   bulletList[i].toDestroy = true;
-        //   enemyList[j].toDestroy = true;
-        // }
+        if (stage.checkCollision(bulletList[i], enemyList[j])) {
+          bulletList[i].toDestroy = true;
+          enemyList[j].toDestroy = true;
+        }
       }
     }
   }
@@ -251,6 +253,31 @@ var Scene = function() {
     }
   }
 
+  var Enemy = function(options) {
+    var ships_textures = resources["http://localhost:8080/public/ships.json"].textures;
+    var self = {
+      id: Math.random(),
+      sprite: new Sprite(ships_textures["greenship3.png"])
+    }
+    self.sprite.position.set(options.x, options.y);
+    self.sprite.rotation = options.rotation || Math.PI;
+    self.sprite.scale.x = options.scale || 0.2;
+    self.sprite.scale.y = options.scale || 0.2;
+    self.sprite.update = function() {
+      self.sprite.y += 0.5;
+      if (self.sprite.toDestroy) {
+        self.sprite.destroy();
+        delete enemyList[self.id];
+      }
+    }
+    stage.addChild(self.sprite);
+    enemyList[self.id] = self;
+    return self;
+  }
+
+  
+
+
   var createEnemies = function() {
     enemyList = {};
     var enemyNum = 17;
@@ -258,34 +285,32 @@ var Scene = function() {
     var centerPosition = 500;
     var enemyWide = (enemyNum - 1) * enemySpan;
     for (var i = 0; i < enemyNum; i++) {
-      var id = resources["http://localhost:8080/public/ships.json"].textures;
-      var enemy = new Sprite(id["greenship3.png"]);
-      var sprite = new Container();
-      enemy.id = Math.random();
-      enemy.position.set(centerPosition - enemyWide / 2 + i * 50, 100);
-      enemy.rotation = Math.PI;
-      enemy.scale.x = 0.2;
-      enemy.scale.y = 0.2;
-      enemy.update = function() {
-        enemy.y += 0.5;
-        if (enemy.toDestroy) {
-          enemy.destroy();
-          delete enemyList[enemy.id];
-        }
-      }
-      stage.addChild(enemy);
-      enemyList[enemy.id] = enemy;
+      Enemy({
+        x: centerPosition - enemyWide / 2 + i * 50,
+        y: 100
+      })
     }
   }
 
-  self.init = function () {
-    console.log("Olala!!");
+  self.clearCache = function() {
+    loader.reset();
+
   }
+
+  self.loadRes = function() {
+    loader
+      .add("http://localhost:8080/public/ships.json")
+      .add("http://localhost:8080/public/stars1.png")
+      .add("http://localhost:8080/public/stars2.png")
+      .load(setup);
+  }
+
 
   self.reload = function() {
     deleteAll();
     createBg();
-    createUser();
+    var player_ship = createUser();
+    bindKeys(player_ship);
     createEnemies();
   }
   return self;

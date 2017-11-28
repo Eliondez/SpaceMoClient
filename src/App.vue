@@ -33,6 +33,12 @@
                 <button type="button" class="list-group-item list-group-item-action" @click="reloadScene()">
                   Reload
                 </button>
+                <button type="button" class="list-group-item list-group-item-action" @click="clearCache()">
+                  Clear cache
+                </button>
+                <button type="button" class="list-group-item list-group-item-action" @click="loadRes()">
+                  Load Res
+                </button>
                 <!-- <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
                 <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
                 <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
@@ -164,7 +170,14 @@ export default {
     },
     reloadScene: function() {
       scene1.reload();
+    },
+    clearCache: function() {
+      scene1.clearCache();
+    },
+    loadRes: function() {
+      scene1.loadRes();
     }
+
   },
   created: function () {
     return;
