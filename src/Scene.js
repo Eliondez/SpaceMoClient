@@ -64,21 +64,24 @@ var Scene = function() {
   renderer.resize(1000, 600)
   document.getElementById('canvas-container').appendChild(renderer.view);
   var stage = new Container();
-  // // loader.reset();
-  // loader
-  //   .add("http://localhost:8080/public/ships.json")
-  //   .add("http://localhost:8080/public/stars1.png")
-  //   .add("http://localhost:8080/public/stars2.png")
-  //   .load(setup);
 
-  
+
+  self.loadRes = function() {
+    loader
+      .add("http://localhost:8080/public/ships.json")
+      .add("http://localhost:8080/public/stars1.png")
+      .add("http://localhost:8080/public/stars2.png")
+      .load(setup);
+  }
+
+  self.loadRes();
 
   
   function setup() {
     createBg();
     var player_ship = createUser();
     bindKeys(player_ship);
-    // createEnemies();
+    createEnemies();
     stage.checkCollision = function(ent1, ent2) {
       var colDist = 20;
       var dist = Math.hypot(ent1.x - ent2.x, ent1.y - ent2.y);
@@ -104,6 +107,7 @@ var Scene = function() {
     for (var i in bulletList) {
       for (var j in enemyList) {
         if (stage.checkCollision(bulletList[i], enemyList[j])) {
+          console.log("Coll");
           bulletList[i].toDestroy = true;
           enemyList[j].toDestroy = true;
         }
@@ -166,7 +170,7 @@ var Scene = function() {
     sprite.pewpew = false;
     sprite.reload = 0;
     sprite.reloadMax = 14;
-    sprite.linearVel = 1.5;
+    sprite.linearVel = 3.5;
     sprite.update = function() {
       sprite.x += sprite.vx;
       sprite.y += sprite.vy;
@@ -181,27 +185,10 @@ var Scene = function() {
       }
     } 
     sprite.shoot = function() {
-      var bullet = new PIXI.Graphics();
-      bullet.id = Math.random();
-      bullet.beginFill(0xffc107, 1);
-      bullet.drawRect(-2, -4, 4, 8);
-      bullet.endFill();
-      bullet.position.set(sprite.x, sprite.y - 30);
-      bullet.lifetime = 250;
-      bullet.update = function() {
-        bullet.y -= 3;
-        bullet.lifetime -= 1;
-        if (bullet.lifetime <= 0) {
-          bullet.toDestroy = true;
-        }
-        if (bullet.toDestroy) {
-          bullet.destroy();
-          delete bulletList[bullet.id];
-        }
-      };
-
-      bulletList[bullet.id] = bullet;
-      stage.addChild(bullet);
+      Bullet({
+        x: sprite.x,
+        y: sprite.y - 30
+      })
     }
     sprite.addChild(hull);
     stage.addChild(sprite);
@@ -253,6 +240,33 @@ var Scene = function() {
     }
   }
 
+  var Bullet = function(options) {
+    var self = {
+      id: Math.random(),
+      lifetime: 150
+    }
+    var b_sprite = new PIXI.Graphics();
+    b_sprite.beginFill(0xffc107, 1);
+    b_sprite.drawRect(-2, -4, 4, 8);
+    b_sprite.endFill();
+    b_sprite.position.set(options.x, options.y);
+
+    self.sprite = b_sprite;
+    self.sprite.update = function() {
+      self.sprite.y -= 15;
+      self.lifetime -= 1;
+      if (self.lifetime <= 0) {
+        self.sprite.toDestroy = true;
+      }
+      if (self.toDestroy) {
+        self.sprite.destroy();
+        delete bulletList[self.id];
+      }
+    };
+    bulletList[self.id] = self.sprite;
+    stage.addChild(self.sprite);
+  }
+
   var Enemy = function(options) {
     var ships_textures = resources["http://localhost:8080/public/ships.json"].textures;
     var self = {
@@ -271,12 +285,9 @@ var Scene = function() {
       }
     }
     stage.addChild(self.sprite);
-    enemyList[self.id] = self;
+    enemyList[self.id] = self.sprite;
     return self;
   }
-
-  
-
 
   var createEnemies = function() {
     enemyList = {};
@@ -296,15 +307,6 @@ var Scene = function() {
     loader.reset();
 
   }
-
-  self.loadRes = function() {
-    loader
-      .add("http://localhost:8080/public/ships.json")
-      .add("http://localhost:8080/public/stars1.png")
-      .add("http://localhost:8080/public/stars2.png")
-      .load(setup);
-  }
-
 
   self.reload = function() {
     deleteAll();
