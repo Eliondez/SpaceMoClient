@@ -172,8 +172,9 @@ var Scene = function() {
     sprite.reloadMax = 14;
     sprite.linearVel = 3.5;
     sprite.update = function() {
-      sprite.x += sprite.vx;
-      sprite.y += sprite.vy;
+
+      sprite.x = Math.max(Math.min(sprite.x + sprite.vx, renderer.width - 30), 30);
+      sprite.y = Math.max(Math.min(sprite.y + sprite.vy, renderer.height - 30), 30);
             
       if (sprite.reload > 0) {
         sprite.reload -= 1;
@@ -258,7 +259,7 @@ var Scene = function() {
       if (self.lifetime <= 0) {
         self.sprite.toDestroy = true;
       }
-      if (self.toDestroy) {
+      if (self.sprite.toDestroy) {
         self.sprite.destroy();
         delete bulletList[self.id];
       }
