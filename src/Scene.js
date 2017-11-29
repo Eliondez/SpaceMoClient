@@ -64,7 +64,13 @@ var Scene = function() {
   renderer.resize(1000, 600)
   document.getElementById('canvas-container').appendChild(renderer.view);
   var stage = new Container();
-
+  stage.interactive = true;
+  stage.on('click', (event) => {
+    Bullet({
+      x: event.data.originalEvent.offsetX,
+      y: event.data.originalEvent.offsetY
+    })
+ });
 
   self.loadRes = function() {
     loader
@@ -174,7 +180,7 @@ var Scene = function() {
     sprite.update = function() {
 
       sprite.x = Math.max(Math.min(sprite.x + sprite.vx, renderer.width - 30), 30);
-      sprite.y = Math.max(Math.min(sprite.y + sprite.vy, renderer.height - 30), 30);
+      sprite.y = Math.max(Math.min(sprite.y + sprite.vy, renderer.height - 50), 50);
             
       if (sprite.reload > 0) {
         sprite.reload -= 1;
