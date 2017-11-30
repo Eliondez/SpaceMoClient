@@ -5,6 +5,7 @@ var Scene = function() {
   var self = {};
   var userScore = 0;
   var scoreObj;
+  var player_ship;
 
   function keyboard(keyCode) {
     var key = {};
@@ -68,9 +69,14 @@ var Scene = function() {
   var stage = new Container();
   stage.interactive = true;
   stage.on('click', (event) => {
+    var x = event.data.originalEvent.offsetX;
+    var y = event.data.originalEvent.offsetY;
+    var angle = Math.atan2(x - player_ship.x, player_ship.y - y);
+    // console.log(angle);
     Bullet({
-      x: event.data.originalEvent.offsetX,
-      y: event.data.originalEvent.offsetY
+      x: player_ship.x,
+      y: player_ship.y,
+      angle: angle
     })
  });
 
@@ -87,7 +93,7 @@ var Scene = function() {
   
   function setup() {
     createBg();
-    var player_ship = createUser();
+    player_ship = createUser();
     bindKeys(player_ship);
     createEnemies();
     stage.checkCollision = function(ent1, ent2) {
@@ -118,7 +124,7 @@ var Scene = function() {
           bulletList[i].toDestroy = true;
           enemyList[j].toDestroy = true;
           userScore += 1;
-          scoreObj.setText("Score: " + userScore);
+          scoreObj.text = "Score: " + userScore;
         }
       }
     }
@@ -172,6 +178,9 @@ var Scene = function() {
     scoreObj.update = function() {
 
     };
+    scoreObj.interactive = true;
+    scoreObj.buttonMode = true;
+    scoreObj.cursor = 'wait';
     stage.addChild(scoreObj);
   }
 
@@ -188,7 +197,7 @@ var Scene = function() {
     sprite.vy = 0;
     sprite.pewpew = false;
     sprite.reload = 0;
-    sprite.reloadMax = 14;
+    sprite.reloadMax = 4;
     sprite.linearVel = 3.5;
     sprite.update = function() {
 
@@ -263,17 +272,25 @@ var Scene = function() {
   var Bullet = function(options) {
     var self = {
       id: Math.random(),
-      lifetime: 150
+      lifetime: 150,
+      angle: options.angle || 0,
+      vel: 15
     }
+    self.xVel = Math.sin(self.angle) * self.vel;
+    self.yVel = -Math.cos(self.angle) * self.vel;
+
     var b_sprite = new PIXI.Graphics();
     b_sprite.beginFill(0xffc107, 1);
     b_sprite.drawRect(-2, -4, 4, 8);
     b_sprite.endFill();
     b_sprite.position.set(options.x, options.y);
+    b_sprite.rotation = self.angle;
+    // b_sprite.anchor.set(0.5, 0.5);
 
     self.sprite = b_sprite;
     self.sprite.update = function() {
-      self.sprite.y -= 15;
+      self.sprite.y += self.yVel;
+      self.sprite.x += self.xVel;
       self.lifetime -= 1;
       if (self.lifetime <= 0) {
         self.sprite.toDestroy = true;
@@ -297,6 +314,7 @@ var Scene = function() {
     self.sprite.rotation = options.rotation || Math.PI;
     self.sprite.scale.x = options.scale || 0.2;
     self.sprite.scale.y = options.scale || 0.2;
+    self.sprite.anchor.set(0.5, 0.5);
     self.sprite.update = function() {
       self.sprite.y += 0.5;
       if (self.sprite.toDestroy) {
@@ -331,7 +349,7 @@ var Scene = function() {
   self.reload = function() {
     deleteAll();
     createBg();
-    var player_ship = createUser();
+    player_ship = createUser();
     bindKeys(player_ship);
     createEnemies();
   }
