@@ -3,6 +3,8 @@ import 'pixi.js';
 
 var Scene = function() {
   var self = {};
+  var userScore = 0;
+  var scoreObj;
 
   function keyboard(keyCode) {
     var key = {};
@@ -113,9 +115,10 @@ var Scene = function() {
     for (var i in bulletList) {
       for (var j in enemyList) {
         if (stage.checkCollision(bulletList[i], enemyList[j])) {
-          console.log("Coll");
           bulletList[i].toDestroy = true;
           enemyList[j].toDestroy = true;
+          userScore += 1;
+          scoreObj.setText("Score: " + userScore);
         }
       }
     }
@@ -148,6 +151,9 @@ var Scene = function() {
     bgCont.addChild(stars1cont);
     bgCont.addChild(stars2cont);
 
+    
+
+
     bgCont.update = function() {
       stars1cont.y += 0.5;
       if (stars1cont.y > 800) {
@@ -160,6 +166,13 @@ var Scene = function() {
     }
 
     stage.addChild(bgCont);
+    scoreObj = new PIXI.Text('Score: ' + userScore,{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+    scoreObj.anchor.set(0.5, 0.5);
+    scoreObj.position.set(500, 300);
+    scoreObj.update = function() {
+
+    };
+    stage.addChild(scoreObj);
   }
 
   var createUser = function() {
