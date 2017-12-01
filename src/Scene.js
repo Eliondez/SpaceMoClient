@@ -72,6 +72,7 @@ var Scene = function() {
     var x = event.data.originalEvent.offsetX;
     var y = event.data.originalEvent.offsetY;
     var angle = Math.atan2(x - player_ship.x, player_ship.y - y);
+    angle = Math.max(-0.5, Math.min(angle, 0.5));
     // console.log(angle);
     Bullet({
       x: player_ship.x,

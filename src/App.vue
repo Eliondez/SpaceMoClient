@@ -25,7 +25,7 @@
   <b-row>
     <b-col>
       <b-tabs>
-        <b-tab title="Field" active>
+        <b-tab title="Field">
           <br>
           <b-row>
             <b-col>
@@ -39,10 +39,6 @@
                 <button type="button" class="list-group-item list-group-item-action" @click="loadRes()">
                   Load Res
                 </button>
-                <!-- <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-                <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
-                <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
-                <button type="button" class="list-group-item list-group-item-action" disabled>Vestibulum at eros</button> -->
               </div>
             </b-col>
             <b-col>
@@ -52,11 +48,11 @@
             </b-col>
           </b-row>
         </b-tab>
-        <b-tab title="second">
+        <b-tab title="second" active>
           <br>
           <b-row align-self="end">
             <b-col>
-              <b-alert show variant="warning">Warning Alert</b-alert>
+              <ship-constructor></ship-constructor>
             </b-col>
           </b-row>
         </b-tab>
@@ -108,6 +104,7 @@ import io from 'socket.io-client';
 import 'pixi.js';
 import $ from 'jquery';
 import Scene from './Scene.js';
+import ShipConstructor from "./ShipConstructor.vue";
 
 var scene1;
 
@@ -189,6 +186,9 @@ export default {
   },
   mounted: function() {
     scene1 = Scene();
+  },
+  components: {
+    ShipConstructor
   }
 }
 </script>
