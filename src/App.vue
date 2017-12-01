@@ -1,6 +1,6 @@
 <template>
   
-  <b-container fluid class="bv-example-row bv-example-row-flex-cols">
+  <b-container class="bv-example-row bv-example-row-flex-cols">
   <b-navbar toggleable="md" type="light" variant="light">
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
@@ -48,7 +48,7 @@
             </b-col>
           </b-row>
         </b-tab>
-        <b-tab title="second" active>
+        <b-tab title="Ship Constructor" active>
           <br>
           <b-row align-self="end">
             <b-col>
