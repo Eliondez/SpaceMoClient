@@ -25,7 +25,7 @@
   <b-row>
     <b-col>
       <b-tabs>
-        <b-tab title="Field">
+        <b-tab title="Field" active>
           <br>
           <b-row>
             <b-col>
@@ -48,7 +48,7 @@
             </b-col>
           </b-row>
         </b-tab>
-        <b-tab title="Ship Constructor" active>
+        <b-tab title="Ship Constructor">
           <br>
           <b-row align-self="end">
             <b-col>

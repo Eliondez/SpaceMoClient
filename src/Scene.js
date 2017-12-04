@@ -72,14 +72,19 @@ var Scene = function() {
     var x = event.data.originalEvent.offsetX;
     var y = event.data.originalEvent.offsetY;
     var angle = Math.atan2(x - player_ship.x, player_ship.y - y);
-    angle = Math.max(-0.5, Math.min(angle, 0.5));
-    // console.log(angle);
-    Bullet({
-      x: player_ship.x,
-      y: player_ship.y,
-      angle: angle
-    })
- });
+    player_ship.moveTo({ x: x, y: y });
+    // console.log(x, y);
+    // Bullet({
+    //   x: player_ship.x,
+    //   y: player_ship.y,
+    //   angle: angle
+    // })
+  });
+  stage.on('rightclick', (event) => {
+    event.data.originalEvent.preventDefault();
+    console.log("Right click detected!!!");
+    
+  });
 
   self.loadRes = function() {
     loader
@@ -158,15 +163,12 @@ var Scene = function() {
     bgCont.addChild(stars1cont);
     bgCont.addChild(stars2cont);
 
-    
-
-
     bgCont.update = function() {
-      stars1cont.y += 0.5;
+      stars1cont.y += 0.01;
       if (stars1cont.y > 800) {
         stars1cont.y = 0;
       }
-      stars2cont.y += 0.8;
+      stars2cont.y += 0.02;
       if (stars2cont.y > 800) {
         stars2cont.y = 0;
       }
@@ -174,8 +176,8 @@ var Scene = function() {
 
     stage.addChild(bgCont);
     scoreObj = new PIXI.Text('Score: ' + userScore,{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
-    scoreObj.anchor.set(0.5, 0.5);
-    scoreObj.position.set(500, 300);
+    // scoreObj.anchor.set(0.5, 0.5);
+    scoreObj.position.set(10, 10);
     scoreObj.update = function() {
 
     };
@@ -196,14 +198,22 @@ var Scene = function() {
     sprite.position.set(500, 550);
     sprite.vx = 0;
     sprite.vy = 0;
+    sprite.targetPos = {
+      x: 500,
+      y: 550
+    }
     sprite.pewpew = false;
     sprite.reload = 0;
     sprite.reloadMax = 4;
     sprite.linearVel = 3.5;
     sprite.update = function() {
-
-      sprite.x = Math.max(Math.min(sprite.x + sprite.vx, renderer.width - 30), 30);
-      sprite.y = Math.max(Math.min(sprite.y + sprite.vy, renderer.height - 50), 50);
+      var dist = Math.hypot(sprite.x - sprite.targetPos.x, sprite.y - sprite.targetPos.y);
+      if (dist > 5) {
+        sprite.x += sprite.vx;
+        sprite.y += sprite.vy;
+        // sprite.x = Math.max(Math.min(sprite.x + sprite.vx, renderer.width - 30), 30);
+        // sprite.y = Math.max(Math.min(sprite.y + sprite.vy, renderer.height - 50), 50);
+      }
             
       if (sprite.reload > 0) {
         sprite.reload -= 1;
@@ -213,6 +223,14 @@ var Scene = function() {
         sprite.shoot();
         sprite.reload = sprite.reloadMax;
       }
+    }
+    sprite.moveTo = function(target) {
+      sprite.targetPos.x = target.x;
+      sprite.targetPos.y = target.y;
+      var angle = Math.atan2(sprite.targetPos.x - sprite.x, sprite.y - sprite.targetPos.y);
+      sprite.rotation = angle
+      sprite.vx = Math.sin(angle) * sprite.linearVel;
+      sprite.vy = -Math.cos(angle) * sprite.linearVel;
     } 
     sprite.shoot = function() {
       Bullet({
@@ -220,6 +238,7 @@ var Scene = function() {
         y: sprite.y - 30
       })
     }
+
     sprite.addChild(hull);
     stage.addChild(sprite);
 
