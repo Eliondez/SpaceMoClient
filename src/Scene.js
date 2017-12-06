@@ -1,5 +1,6 @@
 "use strict";
 import 'pixi.js';
+import Entity from './Entity.js';
 
 var Scene = function() {
   var self = {};
@@ -68,6 +69,10 @@ var Scene = function() {
   document.getElementById('canvas-container').appendChild(renderer.view);
   var stage = new Container();
   stage.interactive = true;
+
+  for (var i = 0; i < 5; i++) {
+    Entity();
+  }
   stage.on('click', (event) => {
     var x = event.data.originalEvent.offsetX;
     var y = event.data.originalEvent.offsetY;
@@ -204,8 +209,8 @@ var Scene = function() {
     }
     sprite.pewpew = false;
     sprite.reload = 0;
-    sprite.reloadMax = 4;
-    sprite.linearVel = 3.5;
+    sprite.reloadMax = 40;
+    sprite.linearVel = 1.0;
     sprite.update = function() {
       var dist = Math.hypot(sprite.x - sprite.targetPos.x, sprite.y - sprite.targetPos.y);
       if (dist > 5) {
@@ -233,11 +238,16 @@ var Scene = function() {
       sprite.vy = -Math.cos(angle) * sprite.linearVel;
     } 
     sprite.shoot = function() {
-      Bullet({
-        x: sprite.x,
-        y: sprite.y,
-        angle: sprite.rotation
-      })
+      var nums = 50;
+      var angStep = 2 * Math.PI / nums;
+
+      for (var i = 0; i < nums; i++) {
+        Bullet({
+          x: sprite.x,
+          y: sprite.y,
+          angle: sprite.rotation + angStep * i
+        })
+      }  
     }
 
     sprite.addChild(hull);
@@ -293,9 +303,9 @@ var Scene = function() {
   var Bullet = function(options) {
     var self = {
       id: Math.random(),
-      lifetime: 150,
+      lifetime: 30,
       angle: options.angle || 0,
-      vel: 15
+      vel: 5
     }
     self.xVel = Math.sin(self.angle) * self.vel;
     self.yVel = -Math.cos(self.angle) * self.vel;
@@ -389,7 +399,7 @@ var Scene = function() {
     var enemyWide = (enemyNum - 1) * enemySpan;
     for (var i = 0; i < enemyNum; i++) {
       Enemy({
-        x: 100 + Math.random() * (renderer.width - 200) ,
+        x: 100 + Math.random() * (renderer.width - 200),
         y: 100 + Math.random() * (renderer.height - 200)
       })
     }
