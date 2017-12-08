@@ -103,7 +103,7 @@
 import io from 'socket.io-client';
 import 'pixi.js';
 import $ from 'jquery';
-import Scene from './Scene.js';
+import Scene from './scene.js';
 import ShipConstructor from "./ShipConstructor.vue";
 
 var scene1;
