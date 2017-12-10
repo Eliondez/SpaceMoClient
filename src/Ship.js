@@ -8,14 +8,30 @@ var Ship = function() {
   // hull.scale.x = 0.3;
   // hull.scale.y = 0.3;
   // var sprite = new Container();
-  var sprite = new PIXI.Graphics();
-  sprite.beginFill(0xffc107, 1);
-  sprite.drawCircle(0, 0, 10);
-  sprite.endFill();
-  sprite.arc(0,0, 30, 0, Math.PI * 2);
-  sprite.position.set(500, 300);
+  var sprite = new PIXI.Container();
+  var hull = new PIXI.Graphics();
+  hull.rotAngle = 0;
+ 
+  hull.beginFill(0xffc107, 1);
+
+  // var tX = Math.sin(angle) * self.linearVel;
+  // var angle = Math.atan2(self.targetPos.x - self.sprite.x, self.sprite.y - self.targetPos.y);
+  //     self.sprite.rotation = angle
+  //     self.vx = Math.sin(angle) * self.linearVel;
+  //     self.vy = -Math.cos(angle) * self.linearVel;
+
+  hull.drawCircle(0, -10, 10);
+  hull.drawRect(-10, -10, 20, 20);
+  hull.drawCircle(0, 10, 10);
+  hull.endFill();
+  hull.lineStyle(0.5, 0xff00ff, 1);
+  hull.arc(0, 0, 35, 0, Math.PI*2);
+  sprite.addChild(hull);
+
+
   sprite.vx = 0;
-  sprite.vy = 0;
+  sprite.vy = -1;
+  sprite.position.set(500, 300);
   sprite.targetPos = {
     x: 500,
     y: 275
@@ -25,13 +41,11 @@ var Ship = function() {
   // sprite.reloadMax = 40;
   // sprite.linearVel = 1.0;
   sprite.update = function() {
-    // var dist = Math.hypot(sprite.x - sprite.targetPos.x, sprite.y - sprite.targetPos.y);
-    // if (dist > 5) {
-    //   sprite.x += sprite.vx;
-    //   sprite.y += sprite.vy;
-    //   // sprite.x = Math.max(Math.min(sprite.x + sprite.vx, renderer.width - 30), 30);
-    //   // sprite.y = Math.max(Math.min(sprite.y + sprite.vy, renderer.height - 50), 50);
-    // }
+    var dist = Math.hypot(sprite.x - sprite.targetPos.x, sprite.y - sprite.targetPos.y);
+    if (dist > 5) {
+      sprite.x += sprite.vx;
+      sprite.y += sprite.vy;
+    }
           
     // if (sprite.reload > 0) {
     //   sprite.reload -= 1;
@@ -42,14 +56,14 @@ var Ship = function() {
     //   sprite.reload = sprite.reloadMax;
     // }
   }
-  sprite.moveTo = function(target) {
-    // sprite.targetPos.x = target.x;
-    // sprite.targetPos.y = target.y;
-    // var angle = Math.atan2(sprite.targetPos.x - sprite.x, sprite.y - sprite.targetPos.y);
-    // sprite.rotation = angle
-    // sprite.vx = Math.sin(angle) * sprite.linearVel;
-    // sprite.vy = -Math.cos(angle) * sprite.linearVel;
-  } 
+  // sprite.moveTo = function(target) {
+  //   sprite.targetPos.x = target.x;
+  //   sprite.targetPos.y = target.y;
+  //   var angle = Math.atan2(sprite.targetPos.x - sprite.x, sprite.y - sprite.targetPos.y);
+  //   sprite.rotation = angle
+  //   sprite.vx = Math.sin(angle) * sprite.linearVel;
+  //   sprite.vy = -Math.cos(angle) * sprite.linearVel;
+  // } 
   sprite.shoot = function() {
     // var nums = 50;
     // var angStep = 2 * Math.PI / nums;

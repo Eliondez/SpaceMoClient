@@ -12,6 +12,7 @@ var Scene = function() {
   var userScore = 0;
   var scoreObj;
   var player_ship;
+  var loaded = false;
 
   var state,
       enemyList,
@@ -32,12 +33,22 @@ var Scene = function() {
     // player_ship.moveTo({ x: x, y: y });
   });
 
+  document.getElementById('canvas-container').addEventListener('mousemove', function(data) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    console.log(x, y);
+  }) 
+  
   self.loadRes = function() {
-    loader
+    if (!loaded) {
+      loader
       .add("http://localhost:8080/public/ships.json")
       .add("http://localhost:8080/public/stars1.png")
       .add("http://localhost:8080/public/stars2.png")
       .load(setup);
+      loaded = true;
+    }
+    
   }
 
   self.loadRes();

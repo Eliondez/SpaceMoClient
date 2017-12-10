@@ -28,7 +28,7 @@
         <b-tab title="Field" active>
           <br>
           <b-row>
-            <b-col>
+            <b-col sm="2">
               <div class="list-group">
                 <button type="button" class="list-group-item list-group-item-action" @click="reloadScene()">
                   Reload
@@ -41,7 +41,7 @@
                 </button>
               </div>
             </b-col>
-            <b-col>
+            <b-col sm="10">
               <div id="canvas-container"></div>
             </b-col>
             <b-col>
