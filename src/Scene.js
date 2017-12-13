@@ -4,7 +4,7 @@ import Entity from './Entity.js';
 import Renderer from './renderer.js';
 import Stage from './Stage.js';
 import Background from './background.js';
-import Ship from './Ship.js'
+import {Ship, makeShip} from './Ship.js';
 
 
 var Scene = function() {
@@ -29,15 +29,17 @@ var Scene = function() {
   stage.on('click', (event) => {
     var x = event.data.originalEvent.offsetX;
     var y = event.data.originalEvent.offsetY;
+    console.log(x, y);
+    player_ship.moveTo({x: x, y: y});
     // var angle = Math.atan2(x - player_ship.x, player_ship.y - y);
     // player_ship.moveTo({ x: x, y: y });
   });
 
-  document.getElementById('canvas-container').addEventListener('mousemove', function(data) {
-    var x = event.offsetX;
-    var y = event.offsetY;
-    console.log(x, y);
-  }) 
+  // document.getElementById('canvas-container').addEventListener('mousemove', function(data) {
+  //   var x = event.offsetX;
+  //   var y = event.offsetY;
+  //   console.log(x, y);
+  // }) 
   
   self.loadRes = function() {
     if (!loaded) {
@@ -56,8 +58,15 @@ var Scene = function() {
   
   function setup() {
     createBg();
-    var ship = Ship();
-    stage.addChild(ship);
+    player_ship = Ship();
+    stage.addChild(player_ship);
+
+    
+    for (var i = 0; i < 10; i++) {
+      var ship_sprite = makeShip({x: 300 + 50*i, y: 100, startScale: Math.random() * 0.3});
+      stage.addChild(ship_sprite);
+    }
+    
 
     // createEnemies();
     // stage.checkCollision = function(ent1, ent2) {

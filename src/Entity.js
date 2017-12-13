@@ -6,6 +6,8 @@ var Entity = function(options) {
   var self = {
     id: Math.random(),
   }
+  self.x = options.x || 0;
+  self.y = options.y || 0;
   self.vx = 0;
   self.vy = 0;
   self.targetPos = {}
@@ -13,58 +15,38 @@ var Entity = function(options) {
   return self;
 }
 
-// var Enemy = function(options) {
-//   var ships_textures = resources["http://localhost:8080/public/ships.json"].textures;
-//   var self = {
-//     id: Math.random(),
-//     sprite: new Sprite(ships_textures["greenship3.png"])
-//   }
-//   self.sprite.position.set(options.x, options.y);
-//   self.sprite.rotation = options.rotation || Math.PI;
-//   self.sprite.scale.x = options.scale || 0.2;
-//   self.sprite.scale.y = options.scale || 0.2;
-//   self.sprite.anchor.set(0.5, 0.5);
+var addSprite = function(obj, options) {
+  obj.sprite = new PIXI.Container();
+  var hull = new PIXI.Graphics();
+  hull.rotAngle = 0;
+  hull.beginFill(options.color || 0x0fc107, 1);
+  hull.drawCircle(0, 0, 10);
+  hull.endFill();
+  obj.sprite.addChild(hull);
+  obj.growing = true;
+  obj.maxScale = 1.5;
+  obj.resizeSpeed = 0.002;
+  obj.sprite.scale.x =  obj.sprite.scale.y =  options.startScale || Math.random() * 0.5 + 1;
 
-//   self.vx = 0;
-//   self.vy = 0;
-//   self.targetPos = {
-//     x: options.x,
-//     y: options.y
-//   }
-//   self.linearVel = 0.5;
+  obj.sprite.update = function() {
+    // obj.x += obj.vx;
+    // obj.y += obj.vy;
+    if (obj.sprite.scale.x > obj.maxScale) {
+      obj.growing = false;
+    } else if (obj.sprite.scale.x < 1) {
+      obj.growing = true;
+    }
+    if (obj.growing) {
+      obj.sprite.scale.x += obj.resizeSpeed;
+      obj.sprite.scale.y += obj.resizeSpeed;
+    } else {
+      obj.sprite.scale.x -= obj.resizeSpeed;
+      obj.sprite.scale.y -= obj.resizeSpeed;
+    }
+    
+    obj.sprite.position.set(obj.x, obj.y);
+  }
+  return obj.sprite;
+}
 
-//   self.sprite.update = function() {
-
-//     var dist = Math.hypot(self.sprite.x - self.targetPos.x, self.sprite.y - self.targetPos.y);
-//     if (dist > 5) {
-//       self.sprite.x += self.vx;
-//       self.sprite.y += self.vy;
-//     } else {
-//       self.moveTo({
-//         x: self.sprite.x + Math.random() * 200 - 100,
-//         y: self.sprite.y + Math.random() * 200 - 100
-//       })
-//     }
-
-//     self.sprite.y += self.vy;
-//     self.sprite.x += self.vx;
-
-//     if (self.sprite.toDestroy) {
-//       self.sprite.destroy();
-//       delete enemyList[self.id];
-//     }
-//   }
-//   self.moveTo = function(target) {
-//     self.targetPos.x = target.x;
-//     self.targetPos.y = target.y;
-//     var angle = Math.atan2(self.targetPos.x - self.sprite.x, self.sprite.y - self.targetPos.y);
-//     self.sprite.rotation = angle
-//     self.vx = Math.sin(angle) * self.linearVel;
-//     self.vy = -Math.cos(angle) * self.linearVel;
-//   }
-//   stage.addChild(self.sprite);
-//   enemyList[self.id] = self.sprite;
-//   return self;
-// }
-
-export default Entity;
+export {addSprite, Entity};
